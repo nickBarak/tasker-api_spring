@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin()
 @RestController
 @RequestMapping("/task")
 public class TaskController {
@@ -30,26 +30,25 @@ public class TaskController {
     private TaskService taskService;
     
     @PostMapping
-    public ResponseEntity<HttpStatus> doPost(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<HttpStatus> doPost(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean savedSuccessfully = taskService.saveOne(task);
         return new ResponseEntity<HttpStatus>(savedSuccessfully ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> doGet(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<List<Task>> doGet(HttpServletRequest request, HttpServletResponse response) throws Exception {
         List<Task> tasks = taskService.getAll();
         return ResponseEntity.ok().body(tasks);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> doPut(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(task.getContent()); System.out.println(task.getId());
+    public ResponseEntity<HttpStatus> doPut(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean savedSuccessfully = taskService.saveOne(task);
         return new ResponseEntity<HttpStatus>(savedSuccessfully ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> doDelete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws ResourceNotFoundException {
+    public ResponseEntity<HttpStatus> doDelete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws Exception, ResourceNotFoundException {
         boolean deletedSuccessfully = taskService.deleteOne(id);
         return new ResponseEntity<HttpStatus>(deletedSuccessfully ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }

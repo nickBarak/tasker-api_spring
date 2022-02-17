@@ -14,19 +14,21 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public boolean saveOne(Task task) {
-        System.out.println(task.getContent());
+    public boolean saveOne(Task task) throws Exception {
         taskRepository.save(task);
         return true;
     }
 
-    public List<Task> getAll() {
+    public List<Task> getAll() throws Exception {
         List<Task> tasks = (List<Task>) taskRepository.findAll();
         return tasks;
     }
 
-    public boolean deleteOne(Long id) throws ResourceNotFoundException {
-        taskRepository.deleteById(id);
-        return true;
+    public boolean deleteOne(Long id) throws Exception, ResourceNotFoundException {
+            if (!taskRepository.existsById(id)) {
+                throw new ResourceNotFoundException("Task resource not found with ID=" + id);
+            }
+            taskRepository.deleteById(id);
+            return true;
     }
 }
