@@ -13,8 +13,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nickbarak.taskerapi.entity.Task;
+import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
 import com.nickbarak.taskerapi.service.TaskService;
+import com.nickbarak.taskerapi.service.UserService;
+import com.nickbarak.taskerapi.util.JwtUtility;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +41,12 @@ public class TaskControllerTests {
     @MockBean
     private TaskService taskService;
 
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JwtUtility jwtUtility;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -48,13 +57,21 @@ public class TaskControllerTests {
 
     @Test
     public void doPost() throws Exception {
-        String json = "{\"id\": 1, \"content\": \"test\", \"date\": \"2022-02-16T06:35:25.910Z\", \"isComplete\": false}";
+        User user = new User("user1", "pass1");
+        Task task = new Task("test", new Date(), true, user);
         when(taskService.saveOne(any(Task.class)))
-            .thenReturn(true);
+            .thenReturn(task);
         
-        mockMvc.perform(post("/task").contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isCreated());
+        when(jwtUtility.extractUsername(any(String.class)))
+            .thenReturn("user1");
+
+        when(userService.loadUserByUsername(any(String.class)))
+            .thenReturn(user);
+        
+        mockMvc.perform(post("/task").contentType(MediaType.TEXT_PLAIN)
+            .content("some content"))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.author").value("user1"));
 
         verify(taskService).saveOne(any(Task.class));
     }
@@ -62,9 +79,11 @@ public class TaskControllerTests {
     @Test
     public void doGet() throws Exception {
         List<Task> tasks = new LinkedList<>();
-        tasks.add(new Task(1L, "test 1", new Date(), false));
-        tasks.add(new Task(2L, "test 2", new Date(), true));
-        tasks.add(new Task(3L, "test 3", new Date(), false));
+        User user = new User();
+        User user2 = new User();
+        tasks.add(new Task("test 1", new Date(), false, user));
+        tasks.add(new Task("test 2", new Date(), true, user2));
+        tasks.add(new Task("test 3", new Date(), false, user2));
         when(taskService.getAll())
             .thenReturn(tasks);
 
@@ -79,10 +98,10 @@ public class TaskControllerTests {
 
     @Test
     public void doPut() throws Exception {
-        Task task = new Task(1L, "test", new Date(), true);
+        Task task = new Task("test", new Date(), true, new User());
         String json = new ObjectMapper().writeValueAsString(task);
         when(taskService.saveOne(any(Task.class)))
-            .thenReturn(true);
+            .thenReturn(task);
 
         mockMvc.perform(put("/task/1")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.nickbarak.taskerapi.entity.Task;
+import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
 import com.nickbarak.taskerapi.repository.TaskRepository;
 
@@ -35,11 +36,11 @@ public class TaskServiceTests {
 
 	@Test
 	public void saveOne() throws Exception {
-		Task task = new Task(1L, "test", new Date(), false);
+		Task task = new Task("test", new Date(), false, new User());
 		when(taskRepository.save(task))
 			.thenReturn(task);
 
-		assertTrue(taskService.saveOne(task));
+		assertEquals(task, taskService.saveOne(task));
 
 		verify(taskRepository).save(any(Task.class));
 	}
@@ -47,9 +48,11 @@ public class TaskServiceTests {
 	@Test
 	public void getAll() throws Exception {
 		List <Task> tasks = new LinkedList<>();
-		tasks.add(new Task(1L, "test 1", new Date(), true));
-		tasks.add(new Task(2L, "test 2", new Date(), true));
-		tasks.add(new Task(3L, "test 3", new Date(), false));
+		User user = new User();
+		User user2 = new User();
+		tasks.add(new Task("test 1", new Date(), true, user));
+		tasks.add(new Task("test 2", new Date(), true, user2));
+		tasks.add(new Task("test 3", new Date(), false, user2));
 		when(taskRepository.findAll())
 			.thenReturn(tasks);
 

@@ -1,16 +1,21 @@
 package com.nickbarak.taskerapi.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nickbarak.taskerapi.entity.Task;
+import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
 import com.nickbarak.taskerapi.service.TaskService;
+import com.nickbarak.taskerapi.service.UserService;
+import com.nickbarak.taskerapi.util.JwtUtility;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,25 +31,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/task")
 public class TaskController {
+    
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtUtility jwtUtility;
     
-    @PostMapping
-    public ResponseEntity<HttpStatus> doPost(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        boolean savedSuccessfully = taskService.saveOne(task);
-        return new ResponseEntity<HttpStatus>(savedSuccessfully ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
+    @PostMapping()
+    public ResponseEntity<Task> doPost(@RequestBody String content, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String authorizationHeader = request.getHeader("Authorization");
+        String jwt = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+            ? authorizationHeader.substring(7)
+            : "";
+        String username = jwtUtility.extractUsername(jwt);
+        User user = (User) userService.loadUserByUsername(username);
+        Task task = new Task(content, user);
+        Task savedTask = taskService.saveOne(task);
+        return new ResponseEntity<Task>(savedTask, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Task>> doGet(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Task> tasks = taskService.getAll();
-        return ResponseEntity.ok().body(tasks);
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Task>> doGet(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Optional<Task> task = taskService.getOne(id);
+        return new ResponseEntity<Optional<Task>>(task, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> doPut(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        boolean savedSuccessfully = taskService.saveOne(task);
-        return new ResponseEntity<HttpStatus>(savedSuccessfully ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Task> doPut(@RequestBody Task task, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Task savedTask = taskService.saveOne(task);
+        return new ResponseEntity<Task>(savedTask, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
