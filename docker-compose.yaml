@@ -21,15 +21,16 @@ services:
     depends_on:
     - db
     ports:
-    - 8080:8080
+    - 8081:8081
     environment:
-    - PORT=8080
+    - PORT=8081
     - HOST=${HOST}
     - DB_USER=${DB_USER}
     - DB_PASSWORD=${DB_PASSWORD}
     - DB_NAME=${DB_NAME}
     - DB_PORT=5432
     - UI_PORT=80
+    - JWT_SECRET=${JWT_SECRET}
 
   ui:
     image: nickbarak/tasker-ui:latest
@@ -42,4 +43,4 @@ services:
     environment:
     - NODE_ENV=production
     - REACT_APP_API_HOST=${HOST}
-    - REACT_APP_API_PORT=8080
+    - REACT_APP_API_PORT=8081
