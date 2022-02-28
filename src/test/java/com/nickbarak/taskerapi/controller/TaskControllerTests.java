@@ -80,11 +80,10 @@ public class TaskControllerTests {
     public void doGet() throws Exception {
         List<Task> tasks = new LinkedList<>();
         User user = new User();
-        User user2 = new User();
         tasks.add(new Task("test 1", new Date(), false, user));
-        tasks.add(new Task("test 2", new Date(), true, user2));
-        tasks.add(new Task("test 3", new Date(), false, user2));
-        when(taskService.getAll())
+        tasks.add(new Task("test 2", new Date(), true, user));
+        tasks.add(new Task("test 3", new Date(), false, user));
+        when(taskService.getAllByUser(any()))
             .thenReturn(tasks);
 
         mockMvc.perform(get("/task").accept(MediaType.APPLICATION_JSON))
@@ -93,7 +92,7 @@ public class TaskControllerTests {
             .andExpect(jsonPath("$[1].content").value("test 2"))
             .andExpect(jsonPath("$[1].isComplete").value(true));
 
-        verify(taskService).getAll();
+        verify(taskService).getAllByUser(any());
     }
 
     @Test
@@ -127,7 +126,7 @@ public class TaskControllerTests {
             .deleteOne(2L);
 
         mockMvc.perform(delete("/task/1"))
-            .andExpect(status().isOk());
+            .andExpect(status().isNoContent());
 
         mockMvc.perform(delete("/task/2"))
             .andExpect(status().isNotFound());

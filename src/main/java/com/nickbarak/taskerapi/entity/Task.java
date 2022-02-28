@@ -3,10 +3,6 @@ package com.nickbarak.taskerapi.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +34,14 @@ public class Task implements Serializable {
     }
 
     public Task(String content, Date date, boolean isComplete, User author) {
+        this.content = content;
+        this.date = date;
+        this.isComplete = isComplete;
+        this.author = author;
+    }
+
+    public Task(long id, String content, Date date, boolean isComplete, User author) {
+        this.id = id;
         this.content = content;
         this.date = date;
         this.isComplete = isComplete;

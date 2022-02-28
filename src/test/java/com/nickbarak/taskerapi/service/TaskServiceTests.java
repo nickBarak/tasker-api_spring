@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -34,6 +35,9 @@ public class TaskServiceTests {
 	@MockBean
 	private TaskRepository taskRepository;
 
+	@MockBean
+	private UserService userService;
+
 	@Test
 	public void saveOne() throws Exception {
 		Task task = new Task("test", new Date(), false, new User());
@@ -46,19 +50,21 @@ public class TaskServiceTests {
 	}
 
 	@Test
-	public void getAll() throws Exception {
+	public void getAllByUser() throws Exception {
 		List <Task> tasks = new LinkedList<>();
 		User user = new User();
-		User user2 = new User();
 		tasks.add(new Task("test 1", new Date(), true, user));
-		tasks.add(new Task("test 2", new Date(), true, user2));
-		tasks.add(new Task("test 3", new Date(), false, user2));
-		when(taskRepository.findAll())
+		tasks.add(new Task("test 2", new Date(), true, user));
+		tasks.add(new Task("test 3", new Date(), false, user));
+		when(taskRepository.findAllByAuthor(any(User.class)))
 			.thenReturn(tasks);
 
-		assertEquals(tasks, taskService.getAll());
+		when(userService.loadUserByUsername(anyString()))
+			.thenReturn(user);
 
-		verify(taskRepository).findAll();
+		assertEquals(tasks, taskService.getAllByUser(anyString()));
+
+		verify(taskRepository).findAllByAuthor(any(User.class));
 
 	}
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.nickbarak.taskerapi.entity.Task;
+import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
 import com.nickbarak.taskerapi.repository.TaskRepository;
 
@@ -15,12 +16,16 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Task saveOne(Task task) throws Exception {
         return taskRepository.save(task);
     }
 
-    public List<Task> getAll() throws Exception {
-        List<Task> tasks = (List<Task>) taskRepository.findAll();
+    public List<Task> getAllByUser(String username) throws Exception {
+        User author = (User) userService.loadUserByUsername(username);
+        List<Task> tasks = (List<Task>) taskRepository.findAllByAuthor(author);
         return tasks;
     }
 

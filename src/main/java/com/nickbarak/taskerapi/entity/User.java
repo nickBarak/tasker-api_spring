@@ -1,6 +1,5 @@
 package com.nickbarak.taskerapi.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,13 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-// @Data
-// @AllArgsConstructor
-// @NoArgsConstructor
 @Table(name = "app_user")
 @Entity
 public class User implements UserDetails {

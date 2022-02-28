@@ -7,11 +7,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.nickbarak.taskerapi.entity.Task;
 import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
 import com.nickbarak.taskerapi.model.AuthenticationRequest;

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.nickbarak.taskerapi.entity.User;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtility {
-    private String SECRET_KEY = "secret";
+    private String SECRET_KEY = System.getenv("JWT_SECRET");
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
@@ -29,6 +27,13 @@ public class JwtUtility {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUsernameFromHeader(String authorizationHeader) {
+        String jwt = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+            ? authorizationHeader.substring(7)
+            : "";
+        return extractUsername(jwt);
     }
 
     public Date extractExpiration(String token) {

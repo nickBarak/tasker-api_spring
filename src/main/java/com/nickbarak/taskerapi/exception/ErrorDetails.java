@@ -2,7 +2,6 @@ package com.nickbarak.taskerapi.exception;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -16,5 +15,17 @@ public class ErrorDetails {
         this.timestamp = timestamp;
         this.message = message;
         this.details = details;
+    }
+
+    public Date getTimeStamp() {
+        return this.timestamp;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public String getDetails() {
+        return this.details;
     }
 }
