@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo '=== CLONE REPOSITORY ==='
                 sh 'sudo rm -rf tasker-api'
-                git clone 'https://github.com/nickBarak/tasker-api_spring.git' tasker-api
+                sh 'sudo git clone https://github.com/nickBarak/tasker-api_spring.git tasker-api'
             }
         }
 
