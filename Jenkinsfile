@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo '=== CLONE GIT REPOSITORY ==='
                 sh 'sudo rm -rf tasker-api'
-                sh 'sudo git clone https://github.com/nickBarak/tasker-ui.git tasker-api'
+                sh 'sudo git clone https://github.com/nickBarak/tasker-api_spring.git tasker-api'
             }
         }
 
@@ -14,14 +14,14 @@ pipeline {
             steps {
                 echo '=== BUILD DOCKER IMAGE ==='
                 sh 'sudo docker rmi -f nickbarak/tasker-api-spring'
-                sh 'sudo docker build -t nickbarak/tasker-ui-spring tasker-api'
+                sh 'sudo docker build -t nickbarak/tasker-api-spring tasker-api'
             }
         }
 
         stage('Push Docker Image to Remote Repository') {
             steps {
                 echo '=== PUSH DOCKER IMAGE TO REMOTE REPOSITORY ==='
-                sh 'sudo docker push nickbarak/tasker-ui-spring'
+                sh 'sudo docker push nickbarak/tasker-api-spring'
             }
         }
         
