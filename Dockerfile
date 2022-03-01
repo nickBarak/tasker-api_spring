@@ -1,5 +1,9 @@
+FROM maven:latest AS build
+COPY pom.xml pom.xml
+COPY src src
+RUN mvn clean verify
+
 FROM openjdk:latest
-COPY . .
-RUN sudo ./mvnw clean verify
+COPY --from=build target/tasker-api-0.0.1-SNAPSHOT.jar tasker-api.jar
 EXPOSE 8081
-CMD ["java", "-jar", "/target/tasker-api-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "tasker-api.jar"]
