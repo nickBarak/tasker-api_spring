@@ -2,14 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Git Repository') {
-            steps {
-                echo '=== CLONE GIT REPOSITORY ==='
-                sh 'sudo rm -rf tasker-api'
-                sh 'sudo git clone https://github.com/nickBarak/tasker-api_spring.git tasker-api'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 echo '=== BUILD DOCKER IMAGE ==='
