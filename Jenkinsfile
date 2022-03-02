@@ -26,7 +26,7 @@ pipeline {
         stage('Restart Container with Latest Image') {
             steps {
                 echo '=== RESTART CONTAINER WITH LATEST IMAGE ==='
-                sh 'cd ../../../../../home/opc'
+                sh 'sudo cd ../../../../../home/opc'
                 sh 'sudo docker-compose up -d'
             }
         }
