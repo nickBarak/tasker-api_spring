@@ -42,5 +42,8 @@ services:
     - 80:80
     environment:
     - NODE_ENV=production
+    - PORT=80
+    - REACT_APP_NODE_ENV=production
+    - REACT_APP_PORT=80
     - REACT_APP_API_HOST=${HOST}
     - REACT_APP_API_PORT=8081

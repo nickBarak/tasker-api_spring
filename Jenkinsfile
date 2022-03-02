@@ -13,14 +13,13 @@ pipeline {
         stage('Free Memory') {
             steps {
                 echo '=== FREE MEMORY ==='
-                sh 'sudo docker-compose down'
+                sh 'sudo docker-compose -f "../../../../../home/opc/docker-compose.yaml" down'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo '=== BUILD DOCKER IMAGE ==='
-                sh 'sudo docker rmi -f nickbarak/tasker-api-spring'
                 sh 'sudo docker build -t nickbarak/tasker-api-spring tasker-api'
             }
         }
@@ -35,7 +34,6 @@ pipeline {
         stage('Restart Container with Latest Image') {
             steps {
                 echo '=== RESTART CONTAINER WITH LATEST IMAGE ==='
-                sh 'sudo docker-compose -f "../../../../../home/opc/docker-compose.yaml" down'
                 sh 'sudo docker-compose -f "../../../../../home/opc/docker-compose.yaml" up -d'
             }
         }
