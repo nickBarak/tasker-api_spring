@@ -10,6 +10,13 @@ pipeline {
             }
         }
 
+        stage('Free Memory') {
+            steps {
+                echo '=== FREE MEMORY ==='
+                sh 'sudo docker-compose down'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo '=== BUILD DOCKER IMAGE ==='
