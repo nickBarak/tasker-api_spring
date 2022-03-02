@@ -23,6 +23,7 @@ services:
     ports:
     - 8081:8081
     environment:
+    - ENV=${ENV}
     - PORT=8081
     - HOST=${HOST}
     - DB_USER=${DB_USER}
@@ -41,7 +42,7 @@ services:
     ports:
     - 80:80
     environment:
-    - NODE_ENV=production
+    - NODE_ENV=${NODE_ENV}
     - PORT=80
     - REACT_APP_API_HOST=${HOST}
     - REACT_APP_API_PORT=8081
