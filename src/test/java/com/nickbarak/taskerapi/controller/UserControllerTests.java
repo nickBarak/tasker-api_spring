@@ -15,7 +15,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nickbarak.taskerapi.entity.User;
 import com.nickbarak.taskerapi.exception.ResourceNotFoundException;
-import com.nickbarak.taskerapi.model.AuthenticationRequest;
 import com.nickbarak.taskerapi.model.UserRequest;
 import com.nickbarak.taskerapi.service.UserService;
 

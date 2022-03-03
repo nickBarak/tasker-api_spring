@@ -1,7 +1,6 @@
 package com.nickbarak.taskerapi.controller;
 
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,6 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nickbarak.taskerapi.entity.Task;
@@ -91,13 +91,33 @@ public class TaskControllerTests {
         when(taskService.getAllByUser(any()))
             .thenReturn(tasks);
 
-        mockMvc.perform(get("/task").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/task"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.hasSize(3)))
             .andExpect(jsonPath("$[1].content").value("test 2"))
             .andExpect(jsonPath("$[1].isComplete").value(true));
 
         verify(taskService).getAllByUser(any());
+    }
+
+    @Test
+    public void doGetOne() throws Exception {
+        Task task = new Task("test", new Date(), true, new User());
+        when(taskService.getOne(1L))
+            .thenReturn(Optional.of(task));
+
+        doThrow(new ResourceNotFoundException("Resource not found with id=2"))
+            .when(taskService)
+            .getOne(2L);
+
+        mockMvc.perform(get("/task/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content").value("test"));
+
+        mockMvc.perform(get("/task/2"))
+            .andExpect(status().isNotFound());
+
+        verify(taskService, times(2)).getOne(any(Long.class));
     }
 
     @Test

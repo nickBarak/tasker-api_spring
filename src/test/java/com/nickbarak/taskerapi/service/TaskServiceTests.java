@@ -3,7 +3,6 @@ package com.nickbarak.taskerapi.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -16,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import com.nickbarak.taskerapi.entity.Task;
 import com.nickbarak.taskerapi.entity.User;
@@ -70,7 +70,33 @@ public class TaskServiceTests {
 		assertEquals(tasks, taskService.getAllByUser(anyString()));
 
 		verify(taskRepository).findAllByAuthor(any(User.class));
+	}
 
+	@Test
+	public void getOne() throws Exception {
+		Task task = new Task(1L, "content", new Date(), false, new User());
+
+		doReturn(true)
+			.when(taskRepository)
+			.existsById(1L);
+
+		doReturn(Optional.of(task))
+			.when(taskRepository)
+			.findById(1L);
+
+		doReturn(false)
+			.when(taskRepository)
+			.existsById(-1L);
+			
+		doThrow(new RuntimeException("Error deleting task with ID=-1"))
+			.when(taskRepository)
+			.findById(-1L);
+
+		assertDoesNotThrow(() -> taskService.getOne(1L));
+		assertThrows(ResourceNotFoundException.class, () -> taskService.deleteOne(-1L));	
+		
+		verify(taskRepository, times(2)).existsById(any(Long.class));
+		verify(taskRepository, times(1)).findById(any(Long.class));
 	}
 
 	@Test

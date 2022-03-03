@@ -2,7 +2,6 @@ package com.nickbarak.taskerapi.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -57,44 +56,36 @@ public class LoginControllerTests {
     class AuthenticationStub implements Authentication {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
-                // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
             public Object getCredentials() {
-            // TODO Auto-generated method stub
             return null;
             }
 
             @Override
             public Object getPrincipal() {
-            // TODO Auto-generated method stub
             return null;
             }
 
             @Override
             public Object getDetails() {
-            // TODO Auto-generated method stub
             return null;
             }
 
             @Override
             public String getName() {
-            // TODO Auto-generated method stub
             return null;
             }
 
             @Override
             public boolean isAuthenticated() {
-            // TODO Auto-generated method stub
             return true;
             }
 
             @Override
             public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-            // TODO Auto-generated method stub
-            
             }
     }
 
