@@ -6,6 +6,8 @@ public class UserRequest {
     private String password;
     private String role;
 
+    public UserRequest() {}
+
     public UserRequest(long id, String username, String password, String role) {
         this.id = id;
         this.username = username;

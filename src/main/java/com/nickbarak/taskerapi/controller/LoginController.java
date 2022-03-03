@@ -47,7 +47,7 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BadCredentialsException {
         try {
             authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
             return new ResponseEntity<String>("Bad credentials for username=" + authenticationRequest.getUsername(), HttpStatus.UNAUTHORIZED);

@@ -71,7 +71,7 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> doDelete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws Exception, ResourceNotFoundException {
-        boolean deletedSuccessfully = taskService.deleteOne(id);
-        return new ResponseEntity<HttpStatus>(deletedSuccessfully ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND);
+        taskService.deleteOne(id);
+        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 }

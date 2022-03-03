@@ -14,6 +14,7 @@ import com.nickbarak.taskerapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,13 +43,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> doPut(@RequestBody UserRequest userRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity<UserResponse> doPut(@RequestBody UserRequest userRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (!(userRequest instanceof UserRequest)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         User updatedUser = userService.updateOne(userRequest);
         return new ResponseEntity<UserResponse>(new UserResponse(updatedUser), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> doDelete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity<HttpStatus> doDelete(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         userService.deleteOne(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

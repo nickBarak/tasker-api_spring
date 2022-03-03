@@ -1,5 +1,6 @@
 package com.nickbarak.taskerapi.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -90,7 +91,7 @@ public class TaskServiceTests {
 			.when(taskRepository)
 			.deleteById(-1L);
 
-		assertTrue(taskService.deleteOne(1L));
+		assertDoesNotThrow(() -> taskService.deleteOne(1L));
 		assertThrows(ResourceNotFoundException.class, () -> taskService.deleteOne(-1L));	
 		
 		verify(taskRepository, times(2)).existsById(any(Long.class));

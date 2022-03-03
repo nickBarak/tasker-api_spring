@@ -16,9 +16,15 @@ public class UserResponse {
     }
 
     public UserResponse(Optional<User> user) {
-        this.id = -1L;
-        this.username = "Invalid User";
-        this.role = "NONE";
+        if (user.isPresent()) {
+            this.id = user.get().getId();
+            this.username = user.get().getUsername();
+            this.role = user.get().getRole();
+        } else {
+            this.id = -1L;
+            this.username = "Invalid User";
+            this.role = "NONE";
+        }
     }
 
     public long getId() {

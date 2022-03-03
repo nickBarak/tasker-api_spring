@@ -12,6 +12,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '=== BUILD DOCKER IMAGE ==='
+                sh 'sudo cp ../../../../../home/opc/.env .env'
                 sh 'sudo docker build -t nickbarak/tasker-api-spring .'
             }
         }
@@ -26,7 +27,6 @@ pipeline {
         stage('Restart Container with Latest Image') {
             steps {
                 echo '=== RESTART CONTAINER WITH LATEST IMAGE ==='
-                sh 'sudo cp ../../../../../home/opc/.env .env'
                 sh 'sudo docker-compose -f "../../../../../home/opc/docker-compose.yaml" up -d'
             }
         }

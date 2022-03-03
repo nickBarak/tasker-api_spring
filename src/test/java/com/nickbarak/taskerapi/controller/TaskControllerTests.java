@@ -1,5 +1,6 @@
 package com.nickbarak.taskerapi.controller;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -121,7 +122,7 @@ public class TaskControllerTests {
 
     @Test
     public void doDelete() throws Exception {
-        doReturn(true)
+        doNothing()
             .when(taskService)
             .deleteOne(1L);
 
@@ -137,5 +138,4 @@ public class TaskControllerTests {
     
         verify(taskService, times(2)).deleteOne(any(Long.class));
     }
-
 }

@@ -6,7 +6,7 @@ COPY pom.xml pom.xml
 
 COPY src src
 
-RUN mvn clean verify -Pprod
+RUN mvn clean verify
 
 
 # package stage
