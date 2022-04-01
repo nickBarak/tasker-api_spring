@@ -51,7 +51,7 @@ That's it! All other requirements ship with the Docker images.
 ## Getting Started
 Copy the files 'docker-compose.yaml' and 'initdb.sql' located in the root directory of the repository at "https://github.com/nickBarak/tasker-api_spring" to your desired environment.
 
-Now just run the command ```docker-compose up``` and you're good to go! Just vist "localhost" in a web browser.  
+Now just run the command ```docker-compose up``` and you're good to go! Just visit "localhost" in a web browser.  
 
 Note: If facing issues related to environment variables, set the values in a '.env' file in the execution directory.  
 
