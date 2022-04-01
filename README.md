@@ -12,7 +12,6 @@ After toggling a task as complete, a delete button will appear next to the check
 
 ## Technologies
 - Testing  
-	- Cucumber
 	- JUnit
 	- Mockito
 	- Jest
@@ -42,6 +41,7 @@ You will need to ensure the following variables are set in your system environme
 - DB_USER (postgres)
 - DB_PASSWORD (secret)
 - JWT_SECRET (secret_key)
+- ENV (prod)
 
 You will need the following installed to run the application:
 - Docker (incl. docker-compose)
